@@ -28,20 +28,23 @@ import {
   useTheme,
 } from "@mui/material";
 import { ResponsivePie } from "@nivo/pie";
-import {
-  Cancel,
-  MonetizationOn,
-  Delete,
-  Add,
-} from "@mui/icons-material";
+import { Cancel, MonetizationOn, Delete, Add } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
 import SubscriptionModal from "./SubscriptionModal";
-
 
 type Currency = "USD" | "EUR" | "GBP";
 type Frequency = "daily" | "weekly" | "monthly" | "yearly";
 type Status = "Active" | "Canceled" | "Expired" | "Paused";
-type Category = "Sports" | "News" | "Entertainment" | "Lifestyle" | "Technology" | "Finance" | "Politics" | "Business" | "Other";
+type Category =
+  | "Sports"
+  | "News"
+  | "Entertainment"
+  | "Lifestyle"
+  | "Technology"
+  | "Finance"
+  | "Politics"
+  | "Business"
+  | "Other";
 
 interface SubscriptionInput {
   name: string;
@@ -55,17 +58,16 @@ interface SubscriptionInput {
   renewalDate: Dayjs;
 }
 
-
 interface Subscription {
   _id: string;
   name: string;
   price: number;
-  currency: Currency; 
-  frequency: Frequency; 
-  category: Category; 
+  currency: Currency;
+  frequency: Frequency;
+  category: Category;
   paymentMethod: string;
-  startDate: Dayjs; 
-  renewalDate: Dayjs; 
+  startDate: Dayjs;
+  renewalDate: Dayjs;
   status?: Status;
 }
 
@@ -78,17 +80,19 @@ function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   // Add these state variables to your existing Dashboard state
   const [openAddModal, setOpenAddModal] = useState(false);
-  const [SubscriptionInput, setSubscriptionInput] = useState<SubscriptionInput>({
-    name: "",
-    price: 0,
-    currency: "USD",
-    frequency: "monthly",
-    category: "Entertainment",
-    paymentMethod: "",
-    status: "Active",
-    startDate: dayjs().subtract(1, "month"),
-    renewalDate: dayjs(),
-  });
+  const [SubscriptionInput, setSubscriptionInput] = useState<SubscriptionInput>(
+    {
+      name: "",
+      price: 0,
+      currency: "USD",
+      frequency: "monthly",
+      category: "Entertainment",
+      paymentMethod: "",
+      status: "Active",
+      startDate: dayjs().subtract(1, "month"),
+      renewalDate: dayjs(),
+    }
+  );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const displayName = currentUser?.firstName || currentUser?.name;
   const token = localStorage.getItem("token");
@@ -100,7 +104,8 @@ function Dashboard() {
       errors.price = "Price must be greater than 0";
     if (!SubscriptionInput.paymentMethod)
       errors.paymentMethod = "Payment method is required";
-    if (!SubscriptionInput.startDate) errors.startDate = "Start date is required";
+    if (!SubscriptionInput.startDate)
+      errors.startDate = "Start date is required";
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -120,7 +125,7 @@ function Dashboard() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response.data.data.subscription)
+      console.log(response.data.data.subscription);
       if (response.data.success) {
         setSubscriptions([...subscriptions, response.data.data.subscription]);
         setOpenAddModal(false);
@@ -149,8 +154,6 @@ function Dashboard() {
     }
   };
 
-
-  
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
@@ -216,7 +219,7 @@ function Dashboard() {
       );
 
       if (response.data.success) {
-        setSubscriptions((subs:Subscription[]) =>
+        setSubscriptions((subs: Subscription[]) =>
           subs.map((sub) =>
             sub._id === subscriptionId ? { ...sub, status: newStatus } : sub
           )
@@ -237,9 +240,12 @@ function Dashboard() {
 
   const handleDeleteSubscription = async (subscriptionId: string) => {
     try {
-      await axios.delete(`${API_URL}/api/v1/subscriptions/${subscriptionId}/delete`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${API_URL}/api/v1/subscriptions/${subscriptionId}/delete`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setSubscriptions((subs) =>
         subs.filter((sub) => sub._id !== subscriptionId)
@@ -285,9 +291,8 @@ function Dashboard() {
   const upcomingRenewals = subscriptions.filter(
     (sub) =>
       sub.status === "Active" &&
-      new Date(sub.renewalDate.toDate()) > new Date() &&
-      new Date(sub.renewalDate.toDate()) <
-        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      sub.renewalDate.isAfter(dayjs()) && // Compare with current time
+      sub.renewalDate.isBefore(dayjs().add(30, "day")) // Compare with 30 days from now
   ).length;
 
   const categoryData = subscriptions
