@@ -288,12 +288,20 @@ function Dashboard() {
     (sub) => sub.status === "Active"
   ).length;
 
-  const upcomingRenewals = subscriptions.filter(
-    (sub) =>
-      sub.status === "Active" &&
-      sub.renewalDate.isAfter(dayjs()) && // Compare with current time
-      sub.renewalDate.isBefore(dayjs().add(30, "day")) // Compare with 30 days from now
-  ).length;
+  const upcomingRenewals = subscriptions.filter((sub) => {
+    if (sub.status !== "Active") return false;
+
+    const renewalDate = dayjs.isDayjs(sub.renewalDate)
+      ? sub.renewalDate
+      : dayjs(sub.renewalDate);
+
+    if (!renewalDate?.isValid()) return false;
+
+    const now = dayjs();
+    const thirtyDaysFromNow = now.add(30, "days");
+
+    return renewalDate.isAfter(now) && renewalDate.isBefore(thirtyDaysFromNow);
+  }).length;
 
   const categoryData = subscriptions
     .filter((sub) => sub.status === "Active")
