@@ -18,26 +18,43 @@ import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
+type Currency = "USD" | "EUR" | "GBP";
+type Frequency = "daily" | "weekly" | "monthly" | "yearly";
+type Status = "Active" | "Canceled" | "Expired" | "Paused";
+type Category = "Sports" | "News" | "Entertainment" | "Lifestyle" | 
+  "Technology" | "Finance" | "Politics" | "Business" | "Other";
+
+
 interface Subscription {
   name: string;
   price: number;
-  currency: string;
-  frequency: string;
-  category: string;
+  currency: Currency; 
+  frequency: Frequency;
+  category: Category; 
   paymentMethod: string;
-  startDate: Dayjs | null;
-  renewalDate: Dayjs | null;
-  status?: string;
+  startDate: Dayjs; 
+  renewalDate: Dayjs; 
+  status?: Status;
 }
 
-type Frequency = "daily" | "weekly" | "monthly" | "yearly";
+interface SubscriptionInput {
+  name: string;
+  price: number;
+  currency: Currency;
+  frequency: Frequency;
+  category: Category;
+  paymentMethod: string;
+  status: Status;
+  startDate: Dayjs;
+  renewalDate: Dayjs;
+}
 
 interface SubscriptionModalProps {
   open: boolean;
   onClose: () => void;
-  subscription: Subscription;
+  subscriptionInput: SubscriptionInput;
   formErrors: Record<string, string>;
-  onSubscriptionChange: (updatedSubscription: Subscription) => void;
+  onSubscriptionChange: (updatedSubscription: SubscriptionInput) => void;
   onSubmit: () => void;
   isLoading?: boolean;
 }
@@ -45,7 +62,7 @@ interface SubscriptionModalProps {
 function SubscriptionModal({
   open,
   onClose,
-  subscription,
+  subscriptionInput,
   formErrors,
   onSubscriptionChange,
   onSubmit,
@@ -55,7 +72,7 @@ function SubscriptionModal({
   
   const handleChange = (field: keyof Subscription, value: any) => {
     onSubscriptionChange({
-      ...subscription,
+      ...subscriptionInput,
       [field]: value,
     });
   };
@@ -64,7 +81,7 @@ function SubscriptionModal({
     if (!date) return;
   
     const updatedSubscription = {
-      ...subscription,
+      ...subscriptionInput,
       startDate: date,
     };
   
@@ -75,7 +92,7 @@ function SubscriptionModal({
       yearly: { value: 1, unit: "year" as const },
     };
     
-    const period = periodMap[subscription.frequency as Frequency];
+    const period = periodMap[subscriptionInput.frequency as Frequency];
     updatedSubscription.renewalDate = date.add(period.value, period.unit);
   
     onSubscriptionChange(updatedSubscription);
@@ -106,7 +123,7 @@ function SubscriptionModal({
           <Stack spacing={3}>
             <TextField
               label="Subscription Name"
-              value={subscription.name}
+              value={subscriptionInput.name}
               onChange={(e) => handleChange("name", e.target.value)}
               error={!!formErrors.name}
               helperText={formErrors.name}
@@ -116,16 +133,16 @@ function SubscriptionModal({
             <TextField
               label="Price"
               type="number"
-              value={subscription.price || ""}
-              onChange={(e) => handleChange("price", Number(e.target.value))}
+              value={subscriptionInput.price || ""}
+              onChange={(e) => handleChange("price", Number(e.target.value) )}
               error={!!formErrors.price}
               helperText={formErrors.price}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    {subscription.currency === "USD"
+                    {subscriptionInput.currency === "USD"
                       ? "$"
-                      : subscription.currency === "EUR"
+                      : subscriptionInput.currency === "EUR"
                       ? "€"
                       : "£"}
                   </InputAdornment>
@@ -138,9 +155,9 @@ function SubscriptionModal({
             <FormControl fullWidth error={!!formErrors.currency}>
               <InputLabel>Currency</InputLabel>
               <Select
-                value={subscription.currency}
+                value={subscriptionInput.currency}
                 label="Currency"
-                onChange={(e) => handleChange("currency", e.target.value)}
+                onChange={(e) => handleChange("currency", e.target.value as Currency)}
               >
                 <MenuItem value="USD">USD ($)</MenuItem>
                 <MenuItem value="EUR">EUR (€)</MenuItem>
@@ -154,9 +171,9 @@ function SubscriptionModal({
             <FormControl fullWidth error={!!formErrors.frequency}>
               <InputLabel>Frequency</InputLabel>
               <Select
-                value={subscription.frequency}
+                value={subscriptionInput.frequency}
                 label="Frequency"
-                onChange={(e) => handleChange("frequency", e.target.value)}
+                onChange={(e) => handleChange("frequency", e.target.value as Frequency)}
               >
                 <MenuItem value="daily">Daily</MenuItem>
                 <MenuItem value="weekly">Weekly</MenuItem>
@@ -171,9 +188,9 @@ function SubscriptionModal({
             <FormControl fullWidth error={!!formErrors.category}>
               <InputLabel>Category</InputLabel>
               <Select
-                value={subscription.category}
+                value={subscriptionInput.category}
                 label="Category"
-                onChange={(e) => handleChange("category", e.target.value)}
+                onChange={(e) => handleChange("category", e.target.value as Category)}
               >
                 {[
                   "Sports",
@@ -198,7 +215,7 @@ function SubscriptionModal({
 
             <TextField
               label="Payment Method"
-              value={subscription.paymentMethod}
+              value={subscriptionInput.paymentMethod}
               onChange={(e) => handleChange("paymentMethod", e.target.value)}
               error={!!formErrors.paymentMethod}
               helperText={formErrors.paymentMethod}
@@ -207,7 +224,7 @@ function SubscriptionModal({
 
             <DatePicker
               label="Start Date"
-              value={subscription.startDate}
+              value={subscriptionInput.startDate}
               onChange={handleStartDateChange}
               maxDate={dayjs()}
               slotProps={{
@@ -221,9 +238,9 @@ function SubscriptionModal({
 
             <DatePicker
               label="Renewal Date"
-              value={subscription.renewalDate}
+              value={subscriptionInput.renewalDate}
               onChange={(date) => handleChange("renewalDate", date)}
-              minDate={subscription.startDate || dayjs()}
+              minDate={subscriptionInput.startDate || dayjs()}
               slotProps={{
                 textField: {
                   fullWidth: true,

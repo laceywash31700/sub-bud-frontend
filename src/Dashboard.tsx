@@ -31,7 +31,6 @@ import { ResponsivePie } from "@nivo/pie";
 import {
   Cancel,
   MonetizationOn,
-  Category,
   Delete,
   Add,
 } from "@mui/icons-material";
@@ -57,10 +56,17 @@ interface SubscriptionInput {
 }
 
 
-interface Subscription extends Omit<SubscriptionInput, 'startDate' | 'renewalDate'> {
+interface Subscription {
   _id: string;
-  startDate: string;  
-  renewalDate: string; 
+  name: string;
+  price: number;
+  currency: Currency; 
+  frequency: Frequency; 
+  category: Category; 
+  paymentMethod: string;
+  startDate: Dayjs; 
+  renewalDate: Dayjs; 
+  status?: Status;
 }
 
 function Dashboard() {
@@ -143,6 +149,8 @@ function Dashboard() {
     }
   };
 
+
+  
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
@@ -277,8 +285,8 @@ function Dashboard() {
   const upcomingRenewals = subscriptions.filter(
     (sub) =>
       sub.status === "Active" &&
-      new Date(sub.renewalDate) > new Date() &&
-      new Date(sub.renewalDate) <
+      new Date(sub.renewalDate.toDate()) > new Date() &&
+      new Date(sub.renewalDate.toDate()) <
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   ).length;
 
@@ -361,7 +369,6 @@ function Dashboard() {
             <Card>
               <CardContent>
                 <Box display="flex" alignItems="center" mb={1}>
-                  <Category color="primary" sx={{ mr: 1 }} />
                   <Typography variant="h6">Active Subscriptions</Typography>
                 </Box>
                 <Typography variant="h4">{activeSubscriptionsCount}</Typography>
@@ -522,7 +529,7 @@ function Dashboard() {
       <SubscriptionModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        subscription={SubscriptionInput}
+        subscriptionInput={SubscriptionInput}
         formErrors={formErrors}
         onSubscriptionChange={setSubscriptionInput}
         onSubmit={handleAddSubscription}
