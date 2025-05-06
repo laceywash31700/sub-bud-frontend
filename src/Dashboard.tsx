@@ -109,7 +109,7 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        `${API_URL}subscriptions/`,
+        `${API_URL}/api/v1/subscriptions/`,
         {
           ...SubscriptionInput,
           startDate: SubscriptionInput.startDate.toISOString(),
@@ -157,7 +157,7 @@ function Dashboard() {
         if (!currentUser) throw new Error("No user logged in");
 
         const response = await axios.get(
-          `${API_URL}subscriptions/user/${currentUser._id}`,
+          `${API_URL}/api/v1/subscriptions/user/${currentUser._id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -190,7 +190,7 @@ function Dashboard() {
   const handleCancelSubscription = async (subscriptionId: string) => {
     try {
       await axios.put(
-        `${API_URL}subscriptions/${subscriptionId}/cancel`,
+        `${API_URL}/api/v1/subscriptions/${subscriptionId}/cancel`,
         { status: "Canceled" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -210,7 +210,7 @@ function Dashboard() {
   ) => {
     try {
       const response = await axios.put(
-        `${API_URL}subscriptions/${subscriptionId}/update`,
+        `${API_URL}/api/v1/subscriptions/${subscriptionId}/update`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -237,7 +237,7 @@ function Dashboard() {
 
   const handleDeleteSubscription = async (subscriptionId: string) => {
     try {
-      await axios.delete(`${API_URL}subscriptions/${subscriptionId}/delete`, {
+      await axios.delete(`${API_URL}/api/v1/subscriptions/${subscriptionId}/delete`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

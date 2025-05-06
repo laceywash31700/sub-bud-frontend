@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post(`${API_URL}auth/sign-in`, { email, password });
+      const response = await axios.post(`${API_URL}/api/v1/auth/sign-in`, { email, password });
       if (response.data.success) {
         console.log(response.data);
         setCurrentUser(response.data.data.user);
@@ -60,7 +60,7 @@ const signUp = async(firstName: string, lastName: string, email: string, passwor
   setLoading(true);
   setError(null);
   try {
-    const response = await axios.post(`${API_URL}auth/sign-up`, { firstName, lastName, email, password });
+    const response = await axios.post(`${API_URL}/api/v1/auth/sign-up`, { firstName, lastName, email, password });
     if (response.data.success) {
       try {
         await login(email, password);
