@@ -30,7 +30,7 @@ export default function ProductHero() {
         variant="h5"
         sx={{ mb: 4, mt: { xs: 4, sm: 10 } }}
       >
-        Keeping track of subscriptions doesn't have to hassle.
+        Keeping track of subscriptions doesn't have to be a hassle.
       </Typography>
       <Button
         color="secondary"
