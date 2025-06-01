@@ -14,7 +14,6 @@ export default defineConfig({
       '@modules': path.resolve(__dirname, './src/modules'),
     },
   },
-  // Add this if you're still having JSX issues
   esbuild: {
     jsx: 'automatic',
     jsxImportSource: 'react',

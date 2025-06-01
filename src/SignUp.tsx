@@ -15,13 +15,6 @@ import FormFeedback from './modules/form/FormFeedback';
 import withRoot from './modules/withRoot';
 import { useAuth } from "./modules/auth/AuthContext";
 
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  [key: string]: string;
-}
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);

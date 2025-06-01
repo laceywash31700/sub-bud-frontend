@@ -1,9 +1,3 @@
-/**
- * This is a simplified logic.
- * Consider using `import isEmail from 'validator/lib/isEmail'` from
- * https://github.com/validatorjs/validator.js/blob/7376945b4ce028b65955ae57b8fccbbf3fe58467/src/lib/isEmail.js
- * for a more robust version.
- */
 function isEmail(string: string) {
     const re =
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;

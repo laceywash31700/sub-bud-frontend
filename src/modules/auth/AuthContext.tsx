@@ -1,4 +1,3 @@
-// src/auth/AuthContext.tsx
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { API_URL } from '@/config/env';
 import axios from 'axios';
@@ -25,7 +24,7 @@ interface AuthContextType {
 
 
 // Create context with default value
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);

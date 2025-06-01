@@ -1,13 +1,6 @@
-import * as React from 'react';
 import { styled, Theme } from '@mui/material/styles';
-import { SxProps } from '@mui/system';
 import Typography from '../components/Typography';
 
-interface FormFeedbackProps extends React.HTMLAttributes<HTMLDivElement> {
-  error?: boolean;
-  success?: boolean;
-  sx?: SxProps<Theme>;
-}
 
 const Root = styled('div', {
   shouldForwardProp: (prop) => prop !== 'error' && prop !== 'success',

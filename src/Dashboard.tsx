@@ -32,44 +32,6 @@ import { Cancel, MonetizationOn, Delete, Add } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
 import SubscriptionModal from "./SubscriptionModal";
 
-type Currency = "USD" | "EUR" | "GBP";
-type Frequency = "daily" | "weekly" | "monthly" | "yearly";
-type Status = "Active" | "Canceled" | "Expired" | "Paused";
-type Category =
-  | "Sports"
-  | "News"
-  | "Entertainment"
-  | "Lifestyle"
-  | "Technology"
-  | "Finance"
-  | "Politics"
-  | "Business"
-  | "Other";
-
-interface SubscriptionInput {
-  name: string;
-  price: number;
-  currency: Currency;
-  frequency: Frequency;
-  category: Category;
-  paymentMethod: string;
-  status: Status;
-  startDate: Dayjs;
-  renewalDate: Dayjs;
-}
-
-interface Subscription {
-  _id: string;
-  name: string;
-  price: number;
-  currency: Currency;
-  frequency: Frequency;
-  category: Category;
-  paymentMethod: string;
-  startDate: Dayjs;
-  renewalDate: Dayjs;
-  status?: Status;
-}
 
 function Dashboard() {
   const theme = useTheme();

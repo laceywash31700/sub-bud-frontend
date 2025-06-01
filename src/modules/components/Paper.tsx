@@ -2,10 +2,6 @@ import * as React from 'react';
 import MuiPaper, { PaperProps } from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 
-interface ExtraPaperProps {
-  background: 'light' | 'main' | 'dark';
-  padding?: boolean;
-}
 
 const PaperRoot = styled(MuiPaper, {
   shouldForwardProp: (prop) => prop !== 'background' && prop !== 'padding',

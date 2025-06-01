@@ -19,9 +19,18 @@
     "strict": true,
     "types": ["vite/client"],
     "typeRoots": [
+      "./node_modules",
       "./node_modules/@types",
-      "./types"
+      "./node_modules/vite",
+      "./src/utils",
+      "./src/__Test__/Test.utils"
     ],
     "jsx": "react-jsx"
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "vite-env.d.ts"
+  ]
 }

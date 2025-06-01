@@ -18,46 +18,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-type Currency = "USD" | "EUR" | "GBP";
-type Frequency = "daily" | "weekly" | "monthly" | "yearly";
-type Status = "Active" | "Canceled" | "Expired" | "Paused";
-type Category = "Sports" | "News" | "Entertainment" | "Lifestyle" | 
-  "Technology" | "Finance" | "Politics" | "Business" | "Other";
-
-
-interface Subscription {
-  name: string;
-  price: number;
-  currency: Currency; 
-  frequency: Frequency;
-  category: Category; 
-  paymentMethod: string;
-  startDate: Dayjs; 
-  renewalDate: Dayjs; 
-  status?: Status;
-}
-
-interface SubscriptionInput {
-  name: string;
-  price: number;
-  currency: Currency;
-  frequency: Frequency;
-  category: Category;
-  paymentMethod: string;
-  status: Status;
-  startDate: Dayjs;
-  renewalDate: Dayjs;
-}
-
-interface SubscriptionModalProps {
-  open: boolean;
-  onClose: () => void;
-  subscriptionInput: SubscriptionInput;
-  formErrors: Record<string, string>;
-  onSubscriptionChange: (updatedSubscription: SubscriptionInput) => void;
-  onSubmit: () => void;
-  isLoading?: boolean;
-}
 
 function SubscriptionModal({
   open,
@@ -70,7 +30,7 @@ function SubscriptionModal({
 }: SubscriptionModalProps) {
   
   
-  const handleChange = (field: keyof Subscription, value: any) => {
+  const handleChange = (field: keyof SubscriptionInputProps, value: any) => {
     onSubscriptionChange({
       ...subscriptionInput,
       [field]: value,

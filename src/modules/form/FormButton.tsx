@@ -3,10 +3,6 @@ import { ButtonProps } from '@mui/material/Button';
 import Button from '../components/Button';
 import defer from './defer';
 
-interface FormButtonProps {
-  disabled?: boolean;
-  mounted?: boolean;
-}
 
 function FormButton<C extends React.ElementType>(
   props: FormButtonProps & ButtonProps<C, { component?: C }>,
